@@ -1,4 +1,4 @@
-export const UPLOAD_URL =
+export const BASE_Q =
   process.env.MODE == 'dev'
-    ? 'http://localhost:8080/api/'
-    : 'http://45.159.250.142:4012/api/';
+    ? 'http://127.0.0.1:3000/ask'
+    : 'http://77.243.80.21:3000/ask';

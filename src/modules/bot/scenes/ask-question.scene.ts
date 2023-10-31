@@ -13,6 +13,7 @@ import { BotService } from '../bot.service';
 import { HttpService } from '@nestjs/axios';
 import { catchError, firstValueFrom } from 'rxjs';
 import { AxiosError } from 'axios';
+import { BASE_Q } from '../../../common/constants/url.constant';
 
 @Injectable()
 @Scene('askQuestion')
@@ -49,7 +50,7 @@ export class AskQuestionScene {
       const question = ctx.message['text'];
       const { data } = await firstValueFrom(
         this.httpService
-          .post<{ message: string }>('http://127.0.0.1:8000/ask', {
+          .post<{ message: string }>(BASE_Q, {
             question: question,
           })
           .pipe(
