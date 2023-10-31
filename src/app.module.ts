@@ -1,0 +1,26 @@
+import { Module } from '@nestjs/common';
+import { BotUpdate } from './modules/bot/bot.update';
+import { UserModule } from './modules/user/user.module';
+import { BotModule } from './modules/bot/bot.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { getOrmAsyncConfig } from './config/orm-async.config';
+import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { getJWTConfig } from './config/jwt.config';
+import { TelegrafModule } from 'nestjs-telegraf';
+import { getTelegrafAsyncConfig } from './config/telegraf-async.config';
+import { HttpModule } from '@nestjs/axios';
+
+@Module({
+  imports: [
+    TypeOrmModule.forRootAsync(getOrmAsyncConfig()),
+    ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.registerAsync(getJWTConfig()),
+    TelegrafModule.forRootAsync(getTelegrafAsyncConfig()),
+
+    UserModule,
+    BotModule,
+  ],
+  controllers: [],
+})
+export class AppModule {}
