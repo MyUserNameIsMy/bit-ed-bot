@@ -41,7 +41,11 @@ export class PostNewsletterScene {
   async onMessage(@Ctx() ctx: SceneContext) {
     const users = await UserEntity.find();
     for (const user of users) {
-      await ctx.copyMessage(user.telegram_id);
+      try {
+        await ctx.copyMessage(user.telegram_id);
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   }
 }
