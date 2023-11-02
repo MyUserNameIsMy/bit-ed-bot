@@ -11,14 +11,20 @@ import {
 import { SceneContext } from 'telegraf/typings/scenes';
 import { Context, Telegraf } from 'telegraf';
 import { UserEntity } from '../../user/entities/user.entity';
+import { BotService } from '../bot.service';
 
 @Injectable()
 @Scene('postNewsLetter')
 export class PostNewsletterScene {
-  constructor(@InjectBot() private readonly bot: Telegraf<Context>) {}
+  constructor(
+    @InjectBot() private readonly bot: Telegraf<Context>,
+    private readonly botService: BotService,
+  ) {}
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext) {
-    await ctx.reply('Отправляй контент.');
+    await ctx.reply('Отправляй контент.', {
+      reply_markup: await this.botService.showKeyboardMenuButtons(),
+    });
   }
 
   @Hears('/menu')
@@ -26,8 +32,8 @@ export class PostNewsletterScene {
     await ctx.scene.enter('base');
   }
 
-  @Hears('/stop')
-  async stop(@Ctx() ctx: SceneContext) {
+  @Hears('🏠 Главное меню')
+  async returnBase2(@Ctx() ctx: SceneContext) {
     await ctx.scene.enter('base');
   }
 

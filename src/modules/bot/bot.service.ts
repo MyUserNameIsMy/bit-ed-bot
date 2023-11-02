@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { InlineKeyboardMarkup } from 'telegraf/src/core/types/typegram';
+import {
+  InlineKeyboardMarkup,
+  ReplyKeyboardMarkup,
+} from 'telegraf/src/core/types/typegram';
 import { UserEntity } from '../user/entities/user.entity';
 import { In } from 'typeorm';
 import { RoleEnum } from '../../common/enums/role.enum';
 import { InjectBot } from 'nestjs-telegraf';
-import { Context, Telegraf } from 'telegraf';
+import { Context, Markup, Telegraf } from 'telegraf';
 
 @Injectable()
 export class BotService {
@@ -16,6 +19,13 @@ export class BotService {
         [{ text: 'Сдать Домашку', callback_data: 'submit-homework' }],
         [{ text: 'Сделать Рассылку', callback_data: 'post-newsletter' }],
       ],
+    };
+  }
+
+  async showKeyboardMenuButtons(): Promise<ReplyKeyboardMarkup> {
+    return {
+      keyboard: [[{ text: '🏠 Главное меню' }]],
+      resize_keyboard: true,
     };
   }
 

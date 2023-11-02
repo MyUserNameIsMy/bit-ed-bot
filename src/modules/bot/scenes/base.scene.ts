@@ -19,6 +19,11 @@ export class BaseScene {
     await ctx.scene.enter('base');
   }
 
+  @Hears('🏠 Главное меню')
+  async returnBase2(@Ctx() ctx: SceneContext) {
+    await ctx.scene.enter('base');
+  }
+
   @Action(/question/)
   async onQuestion(@Ctx() ctx: SceneContext) {
     await ctx.deleteMessage();

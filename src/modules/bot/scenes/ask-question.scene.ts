@@ -1,4 +1,12 @@
-import { Action, Ctx, Hears, On, Scene, SceneEnter } from 'nestjs-telegraf';
+import {
+  Action,
+  Ctx,
+  Hears,
+  InjectBot,
+  On,
+  Scene,
+  SceneEnter,
+} from 'nestjs-telegraf';
 import { Injectable } from '@nestjs/common';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { BotService } from '../bot.service';
@@ -6,15 +14,14 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { BASE_Q } from '../../../common/constants/url.constant';
 import { QuestionService } from '../../question/question.service';
-import { UserEntity } from '../../user/entities/user.entity';
-import { In } from 'typeorm';
-import { RoleEnum } from '../../../common/enums/role.enum';
 import { ISession } from '../../../common/interfaces/session.interface';
+import { Context, Telegraf } from 'telegraf';
 
 @Injectable()
 @Scene('askQuestion')
 export class AskQuestionScene {
   constructor(
+    @InjectBot() private readonly bot: Telegraf<Context>,
     private readonly botService: BotService,
     private readonly httpService: HttpService,
     private readonly questionService: QuestionService,
@@ -23,16 +30,19 @@ export class AskQuestionScene {
   async enter(@Ctx() ctx: SceneContext) {
     await ctx.reply(
       '👋 Привет! Я здесь, чтобы помочь. У тебя есть какие-то вопросы или что-то, что ты хотел бы узнать? 🤔\n',
+      {
+        reply_markup: await this.botService.showKeyboardMenuButtons(),
+      },
     );
   }
 
   @Hears('/menu')
-  async returnBase(@Ctx() ctx: SceneContext) {
+  async returnBase1(@Ctx() ctx: SceneContext) {
     await ctx.scene.enter('base');
   }
 
-  @Hears('/stop')
-  async stop(@Ctx() ctx: SceneContext) {
+  @Hears('🏠 Главное меню')
+  async returnBase2(@Ctx() ctx: SceneContext) {
     await ctx.scene.enter('base');
   }
 
@@ -48,6 +58,9 @@ export class AskQuestionScene {
     );
     await ctx.reply(
       'Спасибо за ваш вопрос! 🙏 Мы переслали его нашему куратору для более детального рассмотрения. 🕵️‍♂️ В ближайшее время вы получите ответ. 📬 Если у вас будут другие вопросы, не стесняйтесь задавать их. 🤔\n',
+      {
+        reply_markup: await this.botService.showKeyboardMenuButtons(),
+      },
     );
     await ctx.scene.enter('base');
   }
@@ -55,7 +68,9 @@ export class AskQuestionScene {
   @Action(/helped/)
   async helped(@Ctx() ctx: SceneContext) {
     await ctx.editMessageReplyMarkup({ inline_keyboard: [] });
-    await ctx.reply('Отлично! Рад был помочь! 🌟');
+    await ctx.reply('Отлично! Рад был помочь! 🌟', {
+      reply_markup: await this.botService.showKeyboardMenuButtons(),
+    });
     await ctx.scene.enter('base');
   }
 
@@ -88,6 +103,9 @@ export class AskQuestionScene {
 
         await ctx.reply(
           `${data.message} Вопрос сохранен и отправлен кураторам. Ожидайте ответа.`,
+          {
+            reply_markup: await this.botService.showKeyboardMenuButtons(),
+          },
         );
       } else {
         await ctx.reply(data.message, {
