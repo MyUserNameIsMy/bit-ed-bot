@@ -14,4 +14,9 @@ export class SubmitHomeworkScene {
   async returnBase(@Ctx() ctx: SceneContext) {
     await ctx.scene.enter('base');
   }
+
+  @Hears('/stop')
+  async stop(@Ctx() ctx: SceneContext) {
+    await ctx.scene.enter('base');
+  }
 }

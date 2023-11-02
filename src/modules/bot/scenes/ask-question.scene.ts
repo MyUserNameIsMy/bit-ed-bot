@@ -31,6 +31,11 @@ export class AskQuestionScene {
     await ctx.scene.enter('base');
   }
 
+  @Hears('/stop')
+  async stop(@Ctx() ctx: SceneContext) {
+    await ctx.scene.enter('base');
+  }
+
   @Action(/confused/)
   async confused(@Ctx() ctx: SceneContext & ISession) {
     await ctx.editMessageReplyMarkup({ inline_keyboard: [] });

@@ -26,6 +26,11 @@ export class PostNewsletterScene {
     await ctx.scene.enter('base');
   }
 
+  @Hears('/stop')
+  async stop(@Ctx() ctx: SceneContext) {
+    await ctx.scene.enter('base');
+  }
+
   @On('message')
   async onMessage(@Ctx() ctx: SceneContext) {
     const users = await UserEntity.find();
