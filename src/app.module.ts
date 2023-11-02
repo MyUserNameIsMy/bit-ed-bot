@@ -11,6 +11,7 @@ import { TelegrafModule } from 'nestjs-telegraf';
 import { getTelegrafAsyncConfig } from './config/telegraf-async.config';
 import { HttpModule } from '@nestjs/axios';
 import { QuestionModule } from './modules/question/question.module';
+import { CourseMaterialModule } from './modules/course-material/course-material.module';
 
 @Module({
   imports: [
@@ -18,10 +19,11 @@ import { QuestionModule } from './modules/question/question.module';
     ConfigModule.forRoot({ isGlobal: true }),
     JwtModule.registerAsync(getJWTConfig()),
     TelegrafModule.forRootAsync(getTelegrafAsyncConfig()),
-
+    HttpModule,
     UserModule,
     BotModule,
     QuestionModule,
+    CourseMaterialModule,
   ],
   controllers: [],
 })
