@@ -54,15 +54,19 @@ export class BotService {
       message = 'Вопрос отправлен на дополнение от ';
     }
     for (const admin of admins) {
-      await this.bot.telegram.sendMessage(
-        admin.telegram_id,
-        message + '@' + username,
-      );
-      await this.bot.telegram.forwardMessage(
-        admin.telegram_id,
-        chat_id,
-        message_id,
-      );
+      try {
+        await this.bot.telegram.sendMessage(
+          admin.telegram_id,
+          message + '@' + username,
+        );
+        await this.bot.telegram.forwardMessage(
+          admin.telegram_id,
+          chat_id,
+          message_id,
+        );
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   }
 }
