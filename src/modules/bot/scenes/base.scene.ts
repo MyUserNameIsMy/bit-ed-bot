@@ -21,16 +21,19 @@ export class BaseScene {
 
   @Action(/question/)
   async onQuestion(@Ctx() ctx: SceneContext) {
+    await ctx.deleteMessage();
     await ctx.scene.enter('askQuestion');
   }
 
   @Action(/submit-homework/)
   async onSubmitHomework(@Ctx() ctx: SceneContext) {
+    await ctx.deleteMessage();
     await ctx.scene.enter('submitHomework');
   }
 
   @Action(/post-newsletter/)
   async onPostNewsLetter(@Ctx() ctx: SceneContext) {
+    await ctx.deleteMessage();
     await ctx.scene.enter('postNewsLetter');
   }
 }

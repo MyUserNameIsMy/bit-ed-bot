@@ -1,5 +1,6 @@
 import { Column, Entity } from 'typeorm';
 import { RootAbstractEntity } from '../../../database/entities/root-abstract.entity';
+import { RoleEnum } from '../../../common/enums/role.enum';
 
 @Entity('users')
 export class UserEntity extends RootAbstractEntity {
@@ -17,4 +18,7 @@ export class UserEntity extends RootAbstractEntity {
 
   @Column()
   telegram_nick: string;
+
+  @Column({ type: 'enum', enum: RoleEnum, default: RoleEnum.USER })
+  role: RoleEnum;
 }

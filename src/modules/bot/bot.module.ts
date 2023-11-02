@@ -7,6 +7,7 @@ import { SubmitHomeworkScene } from './scenes/submit-homework.scene';
 import { PostNewsletterScene } from './scenes/post-newsletter.scene';
 import { HttpModule } from '@nestjs/axios';
 import { UserService } from '../user/user.service';
+import { QuestionService } from '../question/question.service';
 
 @Module({
   imports: [HttpModule],
@@ -18,6 +19,7 @@ import { UserService } from '../user/user.service';
     SubmitHomeworkScene,
     PostNewsletterScene,
     UserService,
+    QuestionService,
   ],
 })
 export class BotModule {}

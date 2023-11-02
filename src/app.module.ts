@@ -10,6 +10,7 @@ import { getJWTConfig } from './config/jwt.config';
 import { TelegrafModule } from 'nestjs-telegraf';
 import { getTelegrafAsyncConfig } from './config/telegraf-async.config';
 import { HttpModule } from '@nestjs/axios';
+import { QuestionModule } from './modules/question/question.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { HttpModule } from '@nestjs/axios';
 
     UserModule,
     BotModule,
+    QuestionModule,
   ],
   controllers: [],
 })
