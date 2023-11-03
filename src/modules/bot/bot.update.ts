@@ -49,7 +49,7 @@ export class BotUpdate {
     await this.botService.postNewsletters();
   }
 
-  @Cron('24 9 * * *')
+  @Cron('27 9 * * *')
   async test() {
     await this.bot.telegram.sendMessage(860476763, 'Test cron');
   }
