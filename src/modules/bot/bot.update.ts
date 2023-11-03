@@ -44,12 +44,12 @@ export class BotUpdate {
     await ctx.scene.enter('base');
   }
 
-  @Cron('58 9 * * *')
+  @Cron('58 3 * * *')
   async handleCron() {
     await this.botService.postNewsletters();
   }
 
-  @Cron('29 9 * * *')
+  @Cron('33 3 * * *')
   async test() {
     await this.bot.telegram.sendMessage(860476763, 'Test cron');
   }
