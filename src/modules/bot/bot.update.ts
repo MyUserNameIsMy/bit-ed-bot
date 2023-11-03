@@ -4,6 +4,7 @@ import { Context, Telegraf } from 'telegraf';
 import { BotService } from './bot.service';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { UserService } from '../user/user.service';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 @Update()
@@ -41,5 +42,10 @@ export class BotUpdate {
     };
     await this.userService.create(user);
     await ctx.scene.enter('base');
+  }
+
+  @Cron('58 9 * * *')
+  async handleCron() {
+    await this.botService.postNewsletters();
   }
 }

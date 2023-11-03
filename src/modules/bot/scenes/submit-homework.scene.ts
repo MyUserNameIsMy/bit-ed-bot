@@ -9,9 +9,13 @@ export class SubmitHomeworkScene {
   constructor(private readonly botService: BotService) {}
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext) {
-    await ctx.reply('Отправляй домашку. Я жду.', {
-      reply_markup: await this.botService.showKeyboardMenuButtons(),
-    });
+    await ctx.reply(
+      'На данный момент эта функция разрабатывается. 🚀Ожидайте апдейта. 🕒',
+      {
+        reply_markup: await this.botService.showKeyboardMenuButtons(),
+      },
+    );
+    await ctx.scene.enter('base');
   }
 
   @Hears('/menu')

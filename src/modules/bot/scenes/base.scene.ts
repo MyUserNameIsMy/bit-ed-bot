@@ -9,8 +9,9 @@ export class BaseScene {
   constructor(private readonly botService: BotService) {}
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext) {
+    const telegram_id = ctx.message.from.id;
     await ctx.reply('Меню', {
-      reply_markup: await this.botService.showMenuButtons(),
+      reply_markup: await this.botService.showMenuButtons(telegram_id),
     });
   }
 

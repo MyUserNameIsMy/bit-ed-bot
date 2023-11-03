@@ -7,17 +7,31 @@ import { UserEntity } from '../user/entities/user.entity';
 import { In } from 'typeorm';
 import { RoleEnum } from '../../common/enums/role.enum';
 import { InjectBot } from 'nestjs-telegraf';
-import { Context, Markup, Telegraf } from 'telegraf';
+import { Context, Telegraf } from 'telegraf';
+import { SyllabusEntity } from '../course-material/entities/syllabus.entity';
 
 @Injectable()
 export class BotService {
   constructor(@InjectBot() private readonly bot: Telegraf<Context>) {}
-  async showMenuButtons(): Promise<InlineKeyboardMarkup> {
+  async showMenuButtons(telegram_id: number): Promise<InlineKeyboardMarkup> {
+    let show = false;
+    try {
+      const user = await UserEntity.findOneOrFail({
+        where: { telegram_id: telegram_id.toString() },
+      });
+      if (user.role === RoleEnum.ADMIN) {
+        show = true;
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
     return {
       inline_keyboard: [
         [{ text: 'Задать вопрос', callback_data: 'question' }],
         [{ text: 'Сдать Домашку', callback_data: 'submit-homework' }],
-        [{ text: 'Сделать Рассылку', callback_data: 'post-newsletter' }],
+        show
+          ? [{ text: 'Сделать Рассылку', callback_data: 'post-newsletter' }]
+          : [],
       ],
     };
   }
@@ -67,6 +81,28 @@ export class BotService {
       } catch (err) {
         console.log(err.message);
       }
+    }
+  }
+
+  async postNewsletters() {
+    try {
+      const users = await UserEntity.find();
+      const currentDate = new Date();
+      const currentDay = currentDate.getDate();
+
+      const content = await SyllabusEntity.createQueryBuilder('s')
+        .where(`EXTRACT(DAY FROM s.date) = :currentDay`, { currentDay })
+        .getOne();
+
+      for (const user of users) {
+        try {
+          await this.bot.telegram.sendMessage(user.telegram_id, content.text);
+        } catch (e) {
+          console.log(e.message);
+        }
+      }
+    } catch (err) {
+      console.log(err.message);
     }
   }
 }

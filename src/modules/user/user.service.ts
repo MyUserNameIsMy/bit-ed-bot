@@ -7,9 +7,11 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     try {
       if (
-        !(await UserEntity.find({
-          where: { telegram_id: createUserDto.telegram_id },
-        }))
+        (
+          await UserEntity.find({
+            where: { telegram_id: createUserDto.telegram_id },
+          })
+        ).length > 0
       ) {
         return;
       }
