@@ -47,9 +47,13 @@ export class AnswerScene {
       console.log(ctx.message['text']);
       try {
         const username = ctx.session.username;
-        console.log(username);
+
         const user = await UserEntity.findOneOrFail({
-          where: { telegram_nick: username.substring(1) },
+          where: {
+            ...(!Number(username)
+              ? { telegram_nick: username.substring(1) }
+              : { telegram_id: username }),
+          },
         });
         await ctx.copyMessage(user.telegram_id);
         ctx.session.username = 'none';
