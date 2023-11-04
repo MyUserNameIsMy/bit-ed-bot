@@ -68,6 +68,9 @@ export class BotService {
     if (answered) {
       message = 'Вопрос отправлен на дополнение от ';
     }
+    const channel = -4099440980;
+    await this.bot.telegram.sendMessage(channel, message + '@' + username);
+    await this.bot.telegram.forwardMessage(channel, chat_id, message_id);
     for (const admin of admins) {
       try {
         await this.bot.telegram.sendMessage(
