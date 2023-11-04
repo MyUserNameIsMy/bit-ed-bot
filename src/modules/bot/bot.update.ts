@@ -33,6 +33,7 @@ export class BotUpdate {
         reply_markup: await this.botService.showKeyboardMenuButtons(),
       },
     );
+    console.log(ctx.message);
     const user = {
       firstname: ctx.message.from.first_name,
       lastname: ctx.message.from.last_name,

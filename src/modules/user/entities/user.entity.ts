@@ -16,7 +16,7 @@ export class UserEntity extends RootAbstractEntity {
   @Column({ nullable: true })
   phone: string;
 
-  @Column()
+  @Column({ nullable: true })
   telegram_nick: string;
 
   @Column({ type: 'enum', enum: RoleEnum, default: RoleEnum.USER })
