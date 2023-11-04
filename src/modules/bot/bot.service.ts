@@ -28,7 +28,7 @@ export class BotService {
     return {
       inline_keyboard: [
         [{ text: 'Задать вопрос', callback_data: 'question' }],
-        [{ text: 'Сдать Домашку', callback_data: 'submit-homework' }],
+        // [{ text: 'Сдать Домашку', callback_data: 'submit-homework' }],
         show
           ? [{ text: 'Сделать Рассылку', callback_data: 'post-newsletter' }]
           : [],
