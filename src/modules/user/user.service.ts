@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
+import { UserController } from './user.controller';
 
 @Injectable()
 export class UserService {
@@ -26,5 +27,14 @@ export class UserService {
         message: err.message,
       };
     }
+  }
+  async findAll() {
+    try {
+      const users = await UserEntity.find();
+      return {
+        users,
+        capacity: users.length,
+      };
+    } catch (err) {}
   }
 }
