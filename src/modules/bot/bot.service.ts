@@ -32,6 +32,7 @@ export class BotService {
         show
           ? [{ text: 'Сделать Рассылку', callback_data: 'post-newsletter' }]
           : [],
+        show ? [{ text: 'Ответить', callback_data: 'answer' }] : [],
       ],
     };
   }

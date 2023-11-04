@@ -9,10 +9,14 @@ export class BaseScene {
   constructor(private readonly botService: BotService) {}
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext) {
-    const telegram_id = ctx.message.from.id;
-    await ctx.reply('Меню', {
-      reply_markup: await this.botService.showMenuButtons(telegram_id),
-    });
+    try {
+      const telegram_id = ctx.message.from.id;
+      await ctx.reply('Меню', {
+        reply_markup: await this.botService.showMenuButtons(telegram_id),
+      });
+    } catch (err) {
+      console.log(err.message);
+    }
   }
 
   @Hears('/menu')
@@ -27,19 +31,41 @@ export class BaseScene {
 
   @Action(/question/)
   async onQuestion(@Ctx() ctx: SceneContext) {
-    await ctx.deleteMessage();
+    try {
+      await ctx.deleteMessage();
+    } catch (err) {
+      console.error(err.message);
+    }
     await ctx.scene.enter('askQuestion');
   }
 
   @Action(/submit-homework/)
   async onSubmitHomework(@Ctx() ctx: SceneContext) {
-    await ctx.deleteMessage();
+    try {
+      await ctx.deleteMessage();
+    } catch (err) {
+      console.error(err.message);
+    }
     await ctx.scene.enter('submitHomework');
   }
 
   @Action(/post-newsletter/)
   async onPostNewsLetter(@Ctx() ctx: SceneContext) {
-    await ctx.deleteMessage();
+    try {
+      await ctx.deleteMessage();
+    } catch (err) {
+      console.error(err.message);
+    }
     await ctx.scene.enter('postNewsLetter');
+  }
+
+  @Action(/answer/)
+  async onAnswer(@Ctx() ctx: SceneContext) {
+    try {
+      await ctx.deleteMessage();
+    } catch (err) {
+      console.error(err.message);
+    }
+    await ctx.scene.enter('answer');
   }
 }

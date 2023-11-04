@@ -3,5 +3,6 @@ export interface ISession {
     question_id?: number;
     chat_id?: number;
     from?: string;
+    username?: string;
   };
 }
