@@ -1,10 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserController } from './user.controller';
 
 @Injectable()
 export class UserService {
+  async creatMany(createMany: CreateUserDto[]) {
+    for (const c of createMany) {
+      try {
+        await this.create(c);
+      } catch (err) {
+        console.error('CREATE MANY');
+        console.error(err.message);
+        console.error('CREATE MANY');
+      }
+    }
+  }
   async create(createUserDto: CreateUserDto) {
     try {
       if (
@@ -35,6 +46,8 @@ export class UserService {
         users,
         capacity: users.length,
       };
-    } catch (err) {}
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 }

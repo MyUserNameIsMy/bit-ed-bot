@@ -1,13 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  Action,
-  Ctx,
-  Hears,
-  InjectBot,
-  On,
-  Scene,
-  SceneEnter,
-} from 'nestjs-telegraf';
+import { Ctx, Hears, InjectBot, On, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { BotService } from '../bot.service';
 import { ISession } from '../../../common/interfaces/session.interface';
