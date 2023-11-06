@@ -81,7 +81,7 @@ export class BaseScene {
       const history = await HistoryEntity.find();
       for (const h of history) {
         try {
-          await ctx.telegram.forwardMessage(
+          await ctx.telegram.copyMessage(
             ctx.chat.id,
             h.chat_id,
             Number(h.message_id),
