@@ -13,6 +13,7 @@ import { HttpModule } from '@nestjs/axios';
 import { QuestionModule } from './modules/question/question.module';
 import { CourseMaterialModule } from './modules/course-material/course-material.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { HistoryModule } from './modules/history/history.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     BotModule,
     QuestionModule,
     CourseMaterialModule,
+    HistoryModule,
   ],
   controllers: [],
 })

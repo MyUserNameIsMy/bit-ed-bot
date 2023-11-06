@@ -1,17 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import {
-  Action,
-  Ctx,
-  Hears,
-  InjectBot,
-  On,
-  Scene,
-  SceneEnter,
-} from 'nestjs-telegraf';
+import { Ctx, Hears, InjectBot, On, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { Context, Telegraf } from 'telegraf';
 import { UserEntity } from '../../user/entities/user.entity';
 import { BotService } from '../bot.service';
+import { HistoryEntity } from '../../history/entities/history.entity';
+import { RoleEnum } from '../../../common/enums/role.enum';
 
 @Injectable()
 @Scene('postNewsLetter')
@@ -39,6 +33,21 @@ export class PostNewsletterScene {
 
   @On('message')
   async onMessage(@Ctx() ctx: SceneContext) {
+    let admin = null;
+    try {
+      const history = new HistoryEntity();
+      history.message_id = ctx.message.message_id.toString();
+      history.chat_id = ctx.message.chat.id.toString();
+      await history.save();
+      admin = await UserEntity.findOneOrFail({
+        where: {
+          role: RoleEnum.ADMIN,
+          telegram_nick: 'Skelet4on',
+        },
+      });
+    } catch (err) {
+      await ctx.telegram.sendMessage(admin?.telegram_id, err.message);
+    }
     const users = await UserEntity.find();
     for (const user of users) {
       try {
