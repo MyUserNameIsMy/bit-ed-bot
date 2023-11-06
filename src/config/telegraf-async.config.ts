@@ -12,5 +12,8 @@ export const getTelegrafAsyncConfig = (): TelegrafModuleAsyncOptions => ({
   useFactory: (configService: ConfigService): TelegrafModuleOptions => ({
     token: configService.get('TELEGRAM_BOT_TOKEN'),
     middlewares: [sessions.middleware()],
+    options: {
+      handlerTimeout: Infinity,
+    },
   }),
 });

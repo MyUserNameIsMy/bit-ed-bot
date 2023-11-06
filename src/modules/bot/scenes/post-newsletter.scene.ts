@@ -48,13 +48,14 @@ export class PostNewsletterScene {
     } catch (err) {
       await ctx.telegram.sendMessage(admin?.telegram_id, err.message);
     }
-    //const users = await UserEntity.find();
-    // for (const user of users) {
-    //   try {
-    //     await ctx.copyMessage(user.telegram_id);
-    //   } catch (err) {
-    //     console.log(err.message);
-    //   }
-    // }
+    const users = await UserEntity.find();
+    for (const user of users) {
+      try {
+        await ctx.copyMessage(user.telegram_id);
+      } catch (err) {
+        console.log(err.message);
+        await ctx.telegram.sendMessage(admin?.telegram_id, err.message);
+      }
+    }
   }
 }
