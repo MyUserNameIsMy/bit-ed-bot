@@ -3,6 +3,7 @@ import { Action, Ctx, Hears, Scene, SceneEnter } from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { BotService } from '../bot.service';
 import { HistoryEntity } from '../../history/entities/history.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 
 @Injectable()
 @Scene('base')
@@ -87,6 +88,38 @@ export class BaseScene {
             Number(h.message_id),
           );
         } catch (err) {
+          continue;
+        }
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  @Action(/history_send/)
+  async onHistorySend(@Ctx() ctx: SceneContext) {
+    try {
+      await ctx.deleteMessage();
+    } catch (err) {
+      console.error(err.message);
+    }
+    try {
+      const history = await HistoryEntity.find();
+      const users = await UserEntity.find();
+      for (const user of users) {
+        try {
+          for (const h of history) {
+            try {
+              await ctx.telegram.copyMessage(
+                user.telegram_id,
+                h.chat_id,
+                Number(h.message_id),
+              );
+            } catch (err) {
+              continue;
+            }
+          }
+        } catch (e) {
           continue;
         }
       }

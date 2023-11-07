@@ -21,4 +21,7 @@ export class UserEntity extends RootAbstractEntity {
 
   @Column({ type: 'enum', enum: RoleEnum, default: RoleEnum.USER })
   role: RoleEnum;
+
+  @Column({ default: false })
+  verified: boolean;
 }
