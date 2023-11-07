@@ -4,6 +4,7 @@ import { SceneContext } from 'telegraf/typings/scenes';
 import { BotService } from '../bot.service';
 import { HistoryEntity } from '../../history/entities/history.entity';
 import { UserEntity } from '../../user/entities/user.entity';
+import { ClientTutorEntity } from '../../group/entities/client-tutor.entity';
 
 @Injectable()
 @Scene('base')
@@ -96,6 +97,18 @@ export class BaseScene {
     }
   }
 
+  @Action(/contact/)
+  async contact(@Ctx() ctx: SceneContext) {
+    try {
+      console.log(ctx.chat);
+      const client_tutor = await ClientTutorEntity.findOneOrFail({
+        where: { student: ctx.chat.id.toString() },
+      });
+      await ctx.reply(`Ваш куратор @${client_tutor.teacher_nick}`);
+    } catch (err) {
+      await ctx.reply('Проблемы со связью');
+    }
+  }
   @Action(/magic/)
   async onHistorySend(@Ctx() ctx: SceneContext) {
     try {

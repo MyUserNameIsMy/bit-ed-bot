@@ -9,6 +9,7 @@ import { RoleEnum } from '../../common/enums/role.enum';
 import { InjectBot } from 'nestjs-telegraf';
 import { Context, Telegraf } from 'telegraf';
 import { SyllabusEntity } from '../course-material/entities/syllabus.entity';
+import { ClientTutorEntity } from '../group/entities/client-tutor.entity';
 
 @Injectable()
 export class BotService {
@@ -25,6 +26,17 @@ export class BotService {
     } catch (err) {
       console.log(err.message);
     }
+    let contact_with_tutor = false;
+    try {
+      const client_tutor = await ClientTutorEntity.findOneOrFail({
+        where: { student: telegram_id.toString() },
+      });
+      if (client_tutor) {
+        contact_with_tutor = true;
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
     return {
       inline_keyboard: [
         [{ text: 'Задать вопрос', callback_data: 'question' }],
@@ -35,6 +47,9 @@ export class BotService {
           : [],
         show ? [{ text: 'Ответить', callback_data: 'answer' }] : [],
         show ? [{ text: 'Разослать историю', callback_data: 'magic' }] : [],
+        contact_with_tutor
+          ? [{ text: 'Связаться с куратором', callback_data: 'contact' }]
+          : [],
       ],
     };
   }
