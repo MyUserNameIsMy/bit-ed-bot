@@ -78,7 +78,7 @@ export class BotService {
   ) {
     const admins = await UserEntity.find({
       where: {
-        role: In([RoleEnum.ADMIN, RoleEnum.MANAGER]),
+        role: In([RoleEnum.ADMIN]),
       },
     });
     let message = 'Новый вопрос от ';
