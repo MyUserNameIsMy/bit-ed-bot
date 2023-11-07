@@ -96,7 +96,7 @@ export class BaseScene {
     }
   }
 
-  @Action(/history_send/)
+  @Action(/magic/)
   async onHistorySend(@Ctx() ctx: SceneContext) {
     try {
       await ctx.deleteMessage();
