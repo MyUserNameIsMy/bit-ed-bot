@@ -14,6 +14,7 @@ import { QuestionModule } from './modules/question/question.module';
 import { CourseMaterialModule } from './modules/course-material/course-material.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { HistoryModule } from './modules/history/history.module';
+import { GroupModule } from './modules/group/group.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { HistoryModule } from './modules/history/history.module';
     QuestionModule,
     CourseMaterialModule,
     HistoryModule,
+    GroupModule,
   ],
   controllers: [],
 })

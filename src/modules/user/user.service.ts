@@ -16,6 +16,20 @@ export class UserService {
       }
     }
   }
+
+  async verifyMany(verifyMany: CreateUserDto[]) {
+    for (const verify of verifyMany) {
+      try {
+        const user = await UserEntity.findOneOrFail({
+          where: { telegram_id: verify.telegram_id },
+        });
+        user.verified = true;
+        await user.save();
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
+  }
   async create(createUserDto: CreateUserDto) {
     try {
       if (
