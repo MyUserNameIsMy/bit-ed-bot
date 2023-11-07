@@ -21,7 +21,7 @@ export class GroupService {
 
     for (let i = 0; i < managers.length; i++) {
       const manager = managers[i];
-      const group = { manager, users: [] };
+      const group = { manager: manager, users: [] };
 
       const numUsers = usersPerManager + (remainingUsers > 0 ? 1 : 0);
       group.users = users.splice(0, numUsers);
@@ -41,7 +41,7 @@ export class GroupService {
           client_tutor.student_nick = user.telegram_nick;
           await client_tutor.save();
         } catch (err) {
-          console.log(err.message());
+          console.log(err.message);
         }
       }
     }

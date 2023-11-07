@@ -1,6 +1,5 @@
 import { Controller, Post } from '@nestjs/common';
 import { GroupService } from './group.service';
-import { raw } from 'express';
 
 @Controller('group')
 export class GroupController {
