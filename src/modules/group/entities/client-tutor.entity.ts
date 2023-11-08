@@ -3,7 +3,7 @@ import { RootAbstractEntity } from '../../../database/entities/root-abstract.ent
 
 @Entity('groups')
 export class ClientTutorEntity extends RootAbstractEntity {
-  @Column()
+  @Column({ nullable: true })
   group_name: string;
 
   @Column()

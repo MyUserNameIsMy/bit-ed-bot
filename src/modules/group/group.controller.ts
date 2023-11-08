@@ -1,12 +1,18 @@
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { GroupService } from './group.service';
+import { CreateGroupDto } from './dto/create-group.dto';
 
 @Controller('group')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
+  // @Post()
+  // async createMany() {
+  //   return await this.groupService.create();
+  // }
+
   @Post()
-  async create() {
-    return await this.groupService.create();
+  async create(@Body() groupDto: CreateGroupDto) {
+    return await this.groupService.createGroup(groupDto);
   }
 }

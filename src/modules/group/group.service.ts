@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UserEntity } from '../user/entities/user.entity';
 import { RoleEnum } from '../../common/enums/role.enum';
 import { ClientTutorEntity } from './entities/client-tutor.entity';
+import { CreateGroupDto } from './dto/create-group.dto';
 
 @Injectable()
 export class GroupService {
-  async create() {
+  async createGroups() {
     const managers = await UserEntity.find({
       where: { role: RoleEnum.MANAGER },
     });
@@ -48,5 +49,24 @@ export class GroupService {
     return {
       message: 'Success',
     };
+  }
+
+  async createGroup(groupDto: CreateGroupDto) {
+    try {
+      const old_group = await ClientTutorEntity.find({
+        where: { student: groupDto.student },
+      });
+      if (old_group.length > 0) throw 'Already in group';
+
+      const client_tutor = new ClientTutorEntity();
+      client_tutor.student = groupDto.student;
+      client_tutor.student_nick = groupDto.student_nick;
+      client_tutor.teacher = groupDto.teacher;
+      client_tutor.teacher_nick = groupDto.teacher_nick;
+      client_tutor.group_name = groupDto.group_name;
+      await client_tutor.save();
+    } catch (err) {
+      throw new BadRequestException(err.message);
+    }
   }
 }
