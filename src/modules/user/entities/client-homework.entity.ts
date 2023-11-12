@@ -6,12 +6,12 @@ export class ClientHomeworkEntity extends RootAbstractEntity {
   @Column()
   student: string;
 
-  @Column()
+  @Column({ nullable: true })
   teacher: string;
 
   @Column()
   homework: string;
 
-  @Column()
-  score: string;
+  @Column({ default: 0 })
+  score: number;
 }
