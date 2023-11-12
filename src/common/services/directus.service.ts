@@ -9,9 +9,11 @@ export class DirectusService {
 
   async findAllFolders() {
     try {
+      console.log('Here Folder');
       const { data } = await firstValueFrom(
         this.httpService.get<IFolder[]>(process.env.DIRECTUS_BASE + '/folders'),
       );
+      console.log('Exit Folder');
       return data['data'];
     } catch (err) {
       throw err;
