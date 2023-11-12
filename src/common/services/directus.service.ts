@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { IFile, IFolder } from '../interfaces/directus.interface';
+import { IFolder } from '../interfaces/directus.interface';
 
 @Injectable()
 export class DirectusService {
