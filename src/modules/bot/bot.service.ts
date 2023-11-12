@@ -163,22 +163,16 @@ export class BotService {
     const animalEmojis = [
       '🐶',
       '🐱',
-      '🐹',
       '🐰',
       '🦊',
       '🐻',
       '🐼',
       '🐨',
       '🐯',
-      '🐮',
       '🐸',
       '🐙',
-      '🐵',
       '🦄',
-      '🐔',
       '🐧',
-      '🐦',
-      '🐤',
     ];
     const randomIndex = Math.floor(Math.random() * animalEmojis.length);
     return animalEmojis[randomIndex];
