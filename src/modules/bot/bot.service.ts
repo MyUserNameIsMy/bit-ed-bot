@@ -64,10 +64,11 @@ export class BotService {
     const inline_keyboard = [];
     const homeworks = await HomeworkEntity.find();
     console.log(homeworks);
+    let i = 1;
     for (const homework of homeworks) {
       inline_keyboard.push([
         {
-          text: `Домашнее задание ${homework.id}`,
+          text: `Домашнее задание ${i++}`,
           callback_data: `hm-${homework.id}`,
         },
       ]);
