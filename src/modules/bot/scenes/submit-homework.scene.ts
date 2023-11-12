@@ -44,6 +44,9 @@ export class SubmitHomeworkScene {
           student: ctx.message.from.id.toString(),
         },
       });
+      console.log('***************************');
+      console.log(client_tutor);
+      console.log('***************************');
 
       let folders: IFolder[] = await this.directusService.findAllFolders();
       if (
