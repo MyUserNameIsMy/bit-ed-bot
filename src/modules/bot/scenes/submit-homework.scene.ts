@@ -45,7 +45,7 @@ export class SubmitHomeworkScene {
         },
       });
       console.log('***************************');
-      console.log(client_tutor);
+      console.log(ctx.session['hm']);
       console.log('***************************');
 
       let folders: IFolder[] = await this.directusService.findAllFolders();
@@ -111,6 +111,7 @@ export class SubmitHomeworkScene {
         mimetype,
       );
     } catch (err) {
+      console.log(err.message);
       const admin = await UserEntity.findOneOrFail({
         where: {
           role: RoleEnum.ADMIN,
