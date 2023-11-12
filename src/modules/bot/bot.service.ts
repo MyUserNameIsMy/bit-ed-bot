@@ -42,7 +42,7 @@ export class BotService {
       inline_keyboard: [
         [{ text: 'Задать вопрос ❓', callback_data: 'question' }],
         [{ text: 'Загрузить все новости 📰', callback_data: 'history' }],
-        contact_with_tutor ?? show
+        contact_with_tutor && show
           ? [
               { text: 'Сдать Домашку 📚', callback_data: 'submit-homework' },
               { text: 'Сдать отчет 📊', callback_data: 'submit-report' },

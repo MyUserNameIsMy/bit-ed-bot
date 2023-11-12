@@ -9,7 +9,6 @@ import { HttpModule } from '@nestjs/axios';
 import { UserService } from '../user/user.service';
 import { QuestionService } from '../question/question.service';
 import { AnswerScene } from './scenes/answer.scene';
-import { GoogleDriveService } from 'nestjs-google-drive';
 import { DirectusService } from '../../common/services/directus.service';
 import { SubmitReportScene } from './scenes/submit-report.scene';
 
