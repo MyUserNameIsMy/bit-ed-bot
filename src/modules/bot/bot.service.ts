@@ -10,6 +10,7 @@ import { InjectBot } from 'nestjs-telegraf';
 import { Context, Telegraf } from 'telegraf';
 import { SyllabusEntity } from '../course-material/entities/syllabus.entity';
 import { ClientTutorEntity } from '../group/entities/client-tutor.entity';
+import { HomeworkEntity } from '../course-material/entities/homework.entity';
 
 @Injectable()
 export class BotService {
@@ -39,18 +40,40 @@ export class BotService {
     }
     return {
       inline_keyboard: [
-        [{ text: 'Задать вопрос', callback_data: 'question' }],
-        [{ text: 'Загрузить все новости', callback_data: 'history' }],
-        // [{ text: 'Сдать Домашку', callback_data: 'submit-homework' }],
+        [{ text: 'Задать вопрос ❓', callback_data: 'question' }],
+        [{ text: 'Загрузить все новости 📰', callback_data: 'history' }],
+        contact_with_tutor ?? show
+          ? [
+              { text: 'Сдать Домашку 📚', callback_data: 'submit-homework' },
+              { text: 'Сдать отчет 📊', callback_data: 'submit-report' },
+            ]
+          : [],
+        contact_with_tutor
+          ? [{ text: 'Связаться с куратором 🤝', callback_data: 'contact' }]
+          : [],
         show
           ? [{ text: 'Сделать Рассылку', callback_data: 'post-newsletter' }]
           : [],
         show ? [{ text: 'Ответить', callback_data: 'answer' }] : [],
         show ? [{ text: 'Разослать историю', callback_data: 'magic' }] : [],
-        contact_with_tutor
-          ? [{ text: 'Связаться с куратором', callback_data: 'contact' }]
-          : [],
       ],
+    };
+  }
+
+  async chooseHomework(): Promise<InlineKeyboardMarkup> {
+    const inline_keyboard = [];
+    const homeworks = await HomeworkEntity.find();
+    console.log(homeworks);
+    for (const homework of homeworks) {
+      inline_keyboard.push([
+        {
+          text: `Домашнее задание ${homework.id}`,
+          callback_data: `hm-${homework.id}`,
+        },
+      ]);
+    }
+    return {
+      inline_keyboard,
     };
   }
 
@@ -125,5 +148,30 @@ export class BotService {
     } catch (err) {
       console.log(err.message);
     }
+  }
+
+  getRandomAnimalEmoji() {
+    const animalEmojis = [
+      '🐶',
+      '🐱',
+      '🐹',
+      '🐰',
+      '🦊',
+      '🐻',
+      '🐼',
+      '🐨',
+      '🐯',
+      '🐮',
+      '🐸',
+      '🐙',
+      '🐵',
+      '🦄',
+      '🐔',
+      '🐧',
+      '🐦',
+      '🐤',
+    ];
+    const randomIndex = Math.floor(Math.random() * animalEmojis.length);
+    return animalEmojis[randomIndex];
   }
 }

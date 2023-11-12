@@ -44,9 +44,4 @@ export class BotUpdate {
     await this.userService.create(user);
     await ctx.scene.enter('base');
   }
-
-  // @Cron('58 3 * * *')
-  // async handleCron() {
-  //   await this.botService.postNewsletters();
-  // }
 }

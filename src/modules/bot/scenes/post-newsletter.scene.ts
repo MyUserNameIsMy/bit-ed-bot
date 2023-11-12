@@ -53,8 +53,10 @@ export class PostNewsletterScene {
       try {
         await ctx.copyMessage(user.telegram_id);
       } catch (err) {
-        console.log(err.message);
-        await ctx.telegram.sendMessage(admin?.telegram_id, err.message);
+        await ctx.telegram.sendMessage(
+          admin?.telegram_id,
+          err.message + '  ' + user.telegram_id,
+        );
       }
     }
   }

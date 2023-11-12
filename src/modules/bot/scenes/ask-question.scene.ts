@@ -16,6 +16,7 @@ import { BASE_Q } from '../../../common/constants/url.constant';
 import { QuestionService } from '../../question/question.service';
 import { ISession } from '../../../common/interfaces/session.interface';
 import { Context, Telegraf } from 'telegraf';
+import { ClientTutorEntity } from '../../group/entities/client-tutor.entity';
 
 @Injectable()
 @Scene('askQuestion')
@@ -101,12 +102,13 @@ export class AskQuestionScene {
         );
         await this.questionService.create(new_question);
 
+        const client_tutor = await ClientTutorEntity.findOneOrFail({
+          where: { student: ctx.chat.id.toString() },
+        });
         await ctx.reply(
-          `${data.message} ✉️ Вопрос сохранен и отправлен кураторам. Ожидайте ответа. 🕒 На данный момент эта функция разрабатывается. 🚀`,
-          {
-            reply_markup: await this.botService.showKeyboardMenuButtons(),
-          },
+          `Задайте ваш вопрос куратору @${client_tutor.teacher_nick}`,
         );
+        await ctx.scene.enter('base');
       } else {
         await ctx.reply(data.message, {
           reply_markup: await this.botService.showSatisfyButtons(),
@@ -115,6 +117,7 @@ export class AskQuestionScene {
     } catch (err) {
       console.log(err);
       await ctx.reply('Server not responding.');
+      await ctx.scene.enter('base');
     }
   }
 }

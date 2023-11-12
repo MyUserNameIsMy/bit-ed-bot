@@ -4,5 +4,6 @@ export interface ISession {
     chat_id?: number;
     from?: string;
     username?: string;
+    hm?: string;
   };
 }

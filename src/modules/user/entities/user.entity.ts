@@ -24,4 +24,7 @@ export class UserEntity extends RootAbstractEntity {
 
   @Column({ default: false })
   verified: boolean;
+
+  @Column({ default: 0 })
+  balance: number;
 }

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { BotUpdate } from './modules/bot/bot.update';
 import { UserModule } from './modules/user/user.module';
 import { BotModule } from './modules/bot/bot.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
