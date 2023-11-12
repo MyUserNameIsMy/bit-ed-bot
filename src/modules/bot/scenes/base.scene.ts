@@ -8,6 +8,7 @@ import { ClientTutorEntity } from '../../group/entities/client-tutor.entity';
 import { ISession } from '../../../common/interfaces/session.interface';
 import { RoleEnum } from '../../../common/enums/role.enum';
 import { In } from 'typeorm';
+import { HomeworkEntity } from '../../course-material/entities/homework.entity';
 
 @Injectable()
 @Scene('base')
@@ -91,8 +92,27 @@ export class BaseScene {
     }
     console.log(ctx.update['callback_query']['data']);
     ctx.session['hm'] = ctx.update['callback_query']['data'];
+    const hm = ctx.update['callback_query']['data'];
+    const hm_id = hm.replace(/\D/g, '');
+
+    const homework = await HomeworkEntity.findOne({ where: { id: hm_id } });
+
+    await ctx.reply(homework.text, {
+      reply_markup: await this.botService.showHomeworkButton(),
+    });
+    await ctx.reply(
+      '**Для того чтобы выйти или завершить отправку, нажмите на** *Меню* **и выберите** *Меню бота* **или** *Главное меню*.',
+      {
+        parse_mode: 'Markdown',
+      },
+    );
+  }
+
+  @Action(/submit-hm/)
+  async enterSubmitHm(@Ctx() ctx: SceneContext & ISession) {
     await ctx.scene.enter('submitHomework');
   }
+
   @Action(/post-newsletter/)
   async onPostNewsLetter(@Ctx() ctx: SceneContext) {
     try {

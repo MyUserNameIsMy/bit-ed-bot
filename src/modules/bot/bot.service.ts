@@ -45,7 +45,7 @@ export class BotService {
         contact_with_tutor && show
           ? [
               { text: 'Сдать Домашку 📚', callback_data: 'submit-homework' },
-              { text: 'Сдать отчет 📊', callback_data: 'submit-report' },
+              { text: 'Сдать Отчет 📊', callback_data: 'submit-report' },
             ]
           : [],
         contact_with_tutor
@@ -89,6 +89,14 @@ export class BotService {
       inline_keyboard: [
         [{ text: 'Помогло', callback_data: 'helped' }],
         [{ text: 'Непонятно', callback_data: 'confused' }],
+      ],
+    };
+  }
+
+  async showHomeworkButton(): Promise<InlineKeyboardMarkup> {
+    return {
+      inline_keyboard: [
+        [{ text: 'Сдать домашку', callback_data: 'submit-hm' }],
       ],
     };
   }

@@ -120,6 +120,7 @@ export class SubmitHomeworkScene {
       );
     }
   }
+
   @Hears('/menu')
   async returnBase(@Ctx() ctx: SceneContext) {
     await ctx.scene.enter('base');
