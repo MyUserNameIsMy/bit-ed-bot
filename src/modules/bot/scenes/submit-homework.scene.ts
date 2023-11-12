@@ -44,10 +44,6 @@ export class SubmitHomeworkScene {
           student: ctx.message.from.id.toString(),
         },
       });
-      console.log('***************************');
-      console.log(ctx.session['hm']);
-      console.log('***************************');
-
       let folders: IFolder[] = await this.directusService.findAllFolders();
       if (
         !folders.find(
@@ -60,7 +56,7 @@ export class SubmitHomeworkScene {
           parent: null,
         });
       }
-
+      console.log(folders);
       folders = await this.directusService.findAllFolders();
       const tutor_folder = folders.find(
         (obj) =>
@@ -78,7 +74,7 @@ export class SubmitHomeworkScene {
           parent: tutor_folder.id,
         });
       }
-
+      console.log(folders);
       folders = await this.directusService.findAllFolders();
       const hm_folder = folders.find(
         (obj) =>
@@ -97,14 +93,14 @@ export class SubmitHomeworkScene {
           parent: hm_folder.id,
         });
       }
-
+      console.log(folders);
       folders = await this.directusService.findAllFolders();
       const student_folder = folders.find(
         (obj) =>
           obj.name === `${ctx.message.from.id} ${ctx.message.from.username}` &&
           obj.parent === hm_folder.id,
       );
-
+      console.log(folders);
       await this.directusService.importFile(
         url.toString(),
         student_folder.id,
