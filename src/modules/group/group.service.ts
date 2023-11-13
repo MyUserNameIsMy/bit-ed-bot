@@ -17,12 +17,16 @@ export class GroupService {
       },
     });
     console.log(shareDto);
+    const admin = await UserEntity.findOneOrFail({
+      where: {
+        role: RoleEnum.ADMIN,
+        telegram_nick: 'Skelet4on',
+      },
+    });
+    await this.bot.telegram.sendMessage(admin?.telegram_id, shareDto.link);
     for (const member of group_members) {
       try {
-        await this.bot.telegram.sendMessage(
-          member.student,
-          `Пройдите пожалуйста на зум сессию по ссылки ${shareDto.link}`,
-        );
+        await this.bot.telegram.sendMessage(member.student, shareDto.link);
         console.log(
           member.student + ' ' + `${shareDto.link}` + ' ' + shareDto.group_name,
         );
