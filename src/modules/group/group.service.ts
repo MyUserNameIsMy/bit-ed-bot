@@ -3,9 +3,40 @@ import { UserEntity } from '../user/entities/user.entity';
 import { RoleEnum } from '../../common/enums/role.enum';
 import { ClientTutorEntity } from './entities/client-tutor.entity';
 import { CreateGroupDto } from './dto/create-group.dto';
+import { InjectBot } from 'nestjs-telegraf';
+import { Context, Telegraf } from 'telegraf';
+import { ShareDto } from './dto/share.dto';
 
 @Injectable()
 export class GroupService {
+  constructor(@InjectBot() private readonly bot: Telegraf<Context>) {}
+  async share(shareDto: ShareDto) {
+    const group_members = await ClientTutorEntity.find({
+      where: {
+        group_name: shareDto.group_name,
+      },
+    });
+    console.log(shareDto);
+    for (const member of group_members) {
+      try {
+        await this.bot.telegram.sendMessage(
+          member.student,
+          `Пройдите пожалуйста на зум сессию по ссылки ${shareDto.link}`,
+        );
+        console.log(
+          member.student + ' ' + `${shareDto.link}` + ' ' + shareDto.group_name,
+        );
+      } catch (err) {
+        const admin = await UserEntity.findOneOrFail({
+          where: {
+            role: RoleEnum.ADMIN,
+            telegram_nick: 'Skelet4on',
+          },
+        });
+        await this.bot.telegram.sendMessage(admin?.telegram_id, err.message);
+      }
+    }
+  }
   async createGroups() {
     const managers = await UserEntity.find({
       where: { role: RoleEnum.MANAGER },

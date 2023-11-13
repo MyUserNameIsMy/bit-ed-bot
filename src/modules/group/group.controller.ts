@@ -1,14 +1,20 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
+import { ShareDto } from './dto/share.dto';
 
 @Controller('group')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
-  @Post()
-  async createMany() {
-    return await this.groupService.createGroups();
+  // @Post()
+  // async createMany() {
+  //   return await this.groupService.createGroups();
+  // }
+
+  @Post('share-link')
+  async share(@Body() shareDto: ShareDto) {
+    return await this.groupService.share(shareDto);
   }
 
   @Post()
