@@ -11,6 +11,7 @@ import { QuestionService } from '../question/question.service';
 import { AnswerScene } from './scenes/answer.scene';
 import { DirectusService } from '../../common/services/directus.service';
 import { SubmitReportScene } from './scenes/submit-report.scene';
+import { PostToGroupScene } from './scenes/post-to-group.scene';
 
 @Module({
   imports: [HttpModule],
@@ -23,6 +24,7 @@ import { SubmitReportScene } from './scenes/submit-report.scene';
     PostNewsletterScene,
     AnswerScene,
     SubmitReportScene,
+    PostToGroupScene,
     UserService,
     QuestionService,
     DirectusService,

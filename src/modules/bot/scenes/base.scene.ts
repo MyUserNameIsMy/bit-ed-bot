@@ -9,6 +9,7 @@ import { ISession } from '../../../common/interfaces/session.interface';
 import { RoleEnum } from '../../../common/enums/role.enum';
 import { In } from 'typeorm';
 import { HomeworkEntity } from '../../course-material/entities/homework.entity';
+import { ClientHomeworkEntity } from '../../user/entities/client-homework.entity';
 
 @Injectable()
 @Scene('base')
@@ -24,12 +25,18 @@ export class BaseScene {
           role: In[(RoleEnum.USER, RoleEnum.ADMIN)],
         },
       });
-      console.log(user);
+      const homeworks = await ClientHomeworkEntity.find({
+        where: { student: telegram_id.toString() },
+      });
+      user.balance = homeworks.reduce((accumulator, currentValue) => {
+        return accumulator + currentValue.score;
+      }, 0);
+      await user.save();
       await ctx.reply(
         `${
           ctx.message.from.first_name
         } ${this.botService.getRandomAnimalEmoji()}.\n` +
-          (user ? `Текущий баланс ${user?.balance} coins.` : ''),
+          (user ? `Текущий баланс ${user?.balance} баллов.` : ''),
         {
           reply_markup: await this.botService.showMenuButtons(telegram_id),
         },
@@ -67,9 +74,12 @@ export class BaseScene {
       console.error(err.message);
     }
 
-    await ctx.reply('Выберите домашнеее задание которое хотите отправить', {
-      reply_markup: await this.botService.chooseHomework(),
-    });
+    await ctx.reply(
+      'Выберите домашнеее задание которое хотите отправить.\n🔴 означает что время отправки прошло.\n🟢 означает можно еще сдавать.',
+      {
+        reply_markup: await this.botService.chooseHomework(),
+      },
+    );
   }
 
   @Action(/submit-report/)
@@ -94,16 +104,21 @@ export class BaseScene {
     ctx.session['hm'] = ctx.update['callback_query']['data'];
     const hm = ctx.update['callback_query']['data'];
     const hm_id = hm.replace(/\D/g, '');
-
+    if (hm == 'hm-0') {
+      await ctx.replyWithHTML(`*Время отправки домашнего задания прошло.*`, {
+        parse_mode: 'Markdown',
+      });
+      await ctx.scene.enter('base');
+      return;
+    }
     const homework = await HomeworkEntity.findOne({ where: { id: hm_id } });
 
-    await ctx.reply(homework.text, {
-      reply_markup: await this.botService.showHomeworkButton(),
-    });
+    await ctx.reply(homework.text);
     await ctx.reply(
       '**Для того чтобы выйти или завершить отправку, нажмите на** *Меню* **и выберите** *Меню бота* **или** *Главное меню*.',
       {
         parse_mode: 'Markdown',
+        reply_markup: await this.botService.showHomeworkButton(),
       },
     );
   }
@@ -121,6 +136,16 @@ export class BaseScene {
       console.error(err.message);
     }
     await ctx.scene.enter('postNewsLetter');
+  }
+
+  @Action(/post-to-group/)
+  async onPostToGroup(@Ctx() ctx: SceneContext) {
+    try {
+      await ctx.deleteMessage();
+    } catch (err) {
+      console.error(err.message);
+    }
+    await ctx.scene.enter('postToGroup');
   }
 
   @Action(/answer/)

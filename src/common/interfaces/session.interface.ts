@@ -5,5 +5,6 @@ export interface ISession {
     from?: string;
     username?: string;
     hm?: string;
+    group_name?: string;
   };
 }

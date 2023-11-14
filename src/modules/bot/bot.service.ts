@@ -54,6 +54,14 @@ export class BotService {
         show
           ? [{ text: 'Сделать Рассылку', callback_data: 'post-newsletter' }]
           : [],
+        show
+          ? [
+              {
+                text: 'Сделать Рассылку по гурппам',
+                callback_data: 'post-to-group',
+              },
+            ]
+          : [],
         show ? [{ text: 'Ответить', callback_data: 'answer' }] : [],
         show ? [{ text: 'Разослать историю', callback_data: 'magic' }] : [],
       ],
@@ -62,14 +70,19 @@ export class BotService {
 
   async chooseHomework(): Promise<InlineKeyboardMarkup> {
     const inline_keyboard = [];
-    const homeworks = await HomeworkEntity.find();
+    const homeworks = await HomeworkEntity.find({
+      order: {
+        id: 'ASC',
+      },
+    });
     console.log(homeworks);
+    const day = new Date();
     let i = 1;
     for (const homework of homeworks) {
       inline_keyboard.push([
         {
-          text: `Домашнее задание ${i++}`,
-          callback_data: `hm-${homework.id}`,
+          text: `ДЗ ${i++}` + (day > homework.due_to ? ' 🔴' : ' 🟢'),
+          callback_data: `hm-${day > homework.due_to ? 0 : homework.id}`,
         },
       ]);
     }
@@ -97,7 +110,7 @@ export class BotService {
   async showHomeworkButton(): Promise<InlineKeyboardMarkup> {
     return {
       inline_keyboard: [
-        [{ text: 'Сдать домашку', callback_data: 'submit-hm' }],
+        [{ text: 'Приложить файлы', callback_data: 'submit-hm' }],
       ],
     };
   }

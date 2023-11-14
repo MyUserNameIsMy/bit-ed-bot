@@ -56,7 +56,6 @@ export class SubmitHomeworkScene {
           parent: null,
         });
       }
-      console.log(folders);
       folders = await this.directusService.findAllFolders();
       const tutor_folder = folders.find(
         (obj) =>
@@ -74,7 +73,6 @@ export class SubmitHomeworkScene {
           parent: tutor_folder.id,
         });
       }
-      console.log(folders);
       folders = await this.directusService.findAllFolders();
       const hm_folder = folders.find(
         (obj) =>
@@ -93,19 +91,20 @@ export class SubmitHomeworkScene {
           parent: hm_folder.id,
         });
       }
-      console.log(folders);
+      console.log(hm_folder);
       folders = await this.directusService.findAllFolders();
       const student_folder = folders.find(
         (obj) =>
           obj.name === `${ctx.message.from.id} ${ctx.message.from.username}` &&
           obj.parent === hm_folder.id,
       );
-      console.log(folders);
+      console.log(student_folder);
       await this.directusService.importFile(
         url.toString(),
         student_folder.id,
         mimetype,
       );
+      await ctx.reply('Файл Принят');
     } catch (err) {
       console.log(err.message);
       const admin = await UserEntity.findOneOrFail({
@@ -114,7 +113,10 @@ export class SubmitHomeworkScene {
           telegram_nick: 'Skelet4on',
         },
       });
-      await ctx.telegram.sendMessage(admin?.telegram_id, err.message);
+      await ctx.telegram.sendMessage(
+        admin?.telegram_id,
+        err.message + `${ctx.message.from.id} ${ctx.message.from.username}`,
+      );
       await ctx.reply(
         'Возникли проблемы при отправке домашнего задания. Свяжитесь с техническим специалистом @DoubledBo.',
       );
