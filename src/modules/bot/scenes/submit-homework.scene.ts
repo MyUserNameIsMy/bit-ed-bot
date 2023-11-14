@@ -21,7 +21,7 @@ export class SubmitHomeworkScene {
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext & ISession) {
     await ctx.replyWithHTML(
-      `**Отправка домашнего задания. Отправьте домашнее задание в виде файлов или фото/скриншотов по одному.** *🚫 Текст не принимается.* **Для того чтобы выйти или завершить отправку, нажмите на** *Меню* **и выберите** *Меню бота* **или** *Главное меню*.`,
+      `**Отправка домашнего задания. Отправьте домашнее задание в виде файлов или фото/скриншотов по одному.** *🚫 Текст не принимается.* **Убедитесь что получили сообщение файл принят для каждого отправленного файла.** **Для того чтобы выйти или завершить отправку, нажмите на** *Меню* **и выберите** *Меню бота* **или** *Главное меню*.`,
       {
         parse_mode: 'Markdown',
       },
@@ -44,6 +44,7 @@ export class SubmitHomeworkScene {
           student: ctx.message.from.id.toString(),
         },
       });
+
       let folders: IFolder[] = await this.directusService.findAllFolders();
       if (
         !folders.find(
@@ -56,12 +57,12 @@ export class SubmitHomeworkScene {
           parent: null,
         });
       }
+      await this.botService.delay(5000);
       folders = await this.directusService.findAllFolders();
       const tutor_folder = folders.find(
         (obj) =>
           obj.name === client_tutor.group_name + ' ' + client_tutor.teacher,
       );
-      console.log(tutor_folder);
       if (
         !folders.find(
           (obj) =>
@@ -73,6 +74,7 @@ export class SubmitHomeworkScene {
           parent: tutor_folder.id,
         });
       }
+      await this.botService.delay(5000);
       folders = await this.directusService.findAllFolders();
       const hm_folder = folders.find(
         (obj) =>
@@ -91,7 +93,7 @@ export class SubmitHomeworkScene {
           parent: hm_folder.id,
         });
       }
-      console.log(hm_folder);
+      await this.botService.delay(5000);
       folders = await this.directusService.findAllFolders();
       const student_folder = folders.find(
         (obj) =>

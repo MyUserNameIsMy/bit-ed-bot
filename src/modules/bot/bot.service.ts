@@ -190,4 +190,8 @@ export class BotService {
     const randomIndex = Math.floor(Math.random() * animalEmojis.length);
     return animalEmojis[randomIndex];
   }
+
+  async delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
 }

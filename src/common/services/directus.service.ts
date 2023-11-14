@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { IFolder } from '../interfaces/directus.interface';
 
 @Injectable()
@@ -9,11 +9,9 @@ export class DirectusService {
 
   async findAllFolders() {
     try {
-      console.log('Here Folder');
-      const { data } = await firstValueFrom(
+      const { data } = await lastValueFrom(
         this.httpService.get<IFolder[]>(process.env.DIRECTUS_BASE + '/folders'),
       );
-      console.log('Exit Folder');
       return data['data'];
     } catch (err) {
       throw err;
@@ -25,7 +23,6 @@ export class DirectusService {
       const res = await firstValueFrom(
         this.httpService.post(process.env.DIRECTUS_BASE + '/folders', data),
       );
-      console.log(res);
     } catch (err) {
       console.log(err);
       throw err;
