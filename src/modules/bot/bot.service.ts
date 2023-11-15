@@ -21,7 +21,7 @@ export class BotService {
       const user = await UserEntity.findOneOrFail({
         where: { telegram_id: telegram_id.toString() },
       });
-      if (user.role === RoleEnum.ADMIN) {
+      if (user.role === RoleEnum.ADMIN || user.role === RoleEnum.MANAGER) {
         show = true;
       }
     } catch (err) {
@@ -42,7 +42,7 @@ export class BotService {
       inline_keyboard: [
         [{ text: 'Задать вопрос ❓', callback_data: 'question' }],
         [{ text: 'Загрузить все новости 📰', callback_data: 'history' }],
-        contact_with_tutor
+        contact_with_tutor || show
           ? [{ text: 'Сдать Домашку 📚', callback_data: 'submit-homework' }]
           : [],
         contact_with_tutor && show
