@@ -43,10 +43,10 @@ export class BotService {
         [{ text: 'Задать вопрос ❓', callback_data: 'question' }],
         [{ text: 'Загрузить все новости 📰', callback_data: 'history' }],
         contact_with_tutor
-          ? [
-              { text: 'Сдать Домашку 📚', callback_data: 'submit-homework' },
-              //{ text: 'Сдать Отчет 📊', callback_data: 'submit-report' },
-            ]
+          ? [{ text: 'Сдать Домашку 📚', callback_data: 'submit-homework' }]
+          : [],
+        contact_with_tutor && show
+          ? [{ text: 'Сдать Отчет 📊', callback_data: 'submit-report' }]
           : [],
         contact_with_tutor
           ? [{ text: 'Связаться с куратором 🤝', callback_data: 'contact' }]

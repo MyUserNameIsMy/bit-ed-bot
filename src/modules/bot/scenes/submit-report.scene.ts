@@ -10,7 +10,7 @@ export class SubmitReportScene {
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext & ISession) {
     await ctx.reply(
-      `**Отправьте отчет в ввиде файлов или фото/скриншотов или текста. Для того чтобы выйти или завершить отправку нажмите на ** *Меню* **и** *Меню бота* **или** *Главное меню.*`,
+      `**Отправьте отчет в ввиде файлов или фото/скриншотов или текста. Для того чтобы выйти или завершить отправку нажмите на ** *Меню* **и** *Меню бота* **или** *Главное меню.* **Инструкция**`,
       {
         parse_mode: 'Markdown',
       },
@@ -29,5 +29,6 @@ export class SubmitReportScene {
   @On('message')
   async echoChannel(@Ctx() ctx: SceneContext & ISession) {
     await ctx.forwardMessage('-4085369060');
+    await ctx.reply('Ваш файл принят.');
   }
 }
