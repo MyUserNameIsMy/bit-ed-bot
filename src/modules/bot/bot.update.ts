@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Ctx, InjectBot, Start, Update } from 'nestjs-telegraf';
+import { Ctx, InjectBot, On, Start, Update } from 'nestjs-telegraf';
 import { Context, Telegraf } from 'telegraf';
 import { BotService } from './bot.service';
 import { SceneContext } from 'telegraf/typings/scenes';

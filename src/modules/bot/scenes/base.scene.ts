@@ -28,6 +28,13 @@ export class BaseScene {
       const homeworks = await ClientHomeworkEntity.find({
         where: { student: telegram_id.toString() },
       });
+      console.log(ctx.message.from.username);
+      if (
+        ctx.message.from.username &&
+        ctx.message.from.username != user.telegram_nick
+      ) {
+        user.telegram_nick = ctx.message.from.username;
+      }
       user.balance = homeworks.reduce((accumulator, currentValue) => {
         return accumulator + currentValue.score;
       }, 0);
