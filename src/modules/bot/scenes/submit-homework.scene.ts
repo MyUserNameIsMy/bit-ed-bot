@@ -156,7 +156,7 @@ export class SubmitHomeworkScene {
         groups[client_tutor.teacher],
         `Teacher ${client_tutor.teacher} Student ${client_tutor.student} Hm ${ctx.session['hm']}`,
       );
-      await ctx.copyMessage('-1002040594282');
+      await ctx.copyMessage(groups[client_tutor.teacher]);
       await ctx.reply('Файл принят');
     } catch (err) {
       console.log(err.message);
