@@ -206,7 +206,10 @@ export class BaseScene {
       const user = await UserEntity.findOne({
         where: { telegram_id: client_tutor.teacher },
       });
-      if (client_tutor.teacher_nick != user?.telegram_nick) {
+      if (
+        user?.telegram_nick &&
+        client_tutor.teacher_nick != user?.telegram_nick
+      ) {
         client_tutor.teacher_nick = user?.telegram_nick;
       }
       await client_tutor.save();
