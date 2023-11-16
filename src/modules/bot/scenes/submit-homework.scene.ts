@@ -149,7 +149,7 @@ export class SubmitHomeworkScene {
       };
       const client_tutor = await ClientTutorEntity.findOneOrFail({
         where: {
-          student: ctx.message.from.id.toString(),
+          student: ctx.from.id.toString(),
         },
       });
       await ctx.telegram.sendMessage(
