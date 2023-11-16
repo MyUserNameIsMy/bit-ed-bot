@@ -198,20 +198,21 @@ export class BaseScene {
         where: { student: ctx.chat.id.toString() },
       });
       if (
-        ctx.message.from.username &&
-        ctx.message.from.username != client_tutor.student_nick
+        ctx.from?.username &&
+        ctx.from?.username != client_tutor.student_nick
       ) {
-        client_tutor.student_nick = ctx.message.from.username;
+        client_tutor.student_nick = ctx.from.username;
       }
       const user = await UserEntity.findOne({
         where: { telegram_id: client_tutor.teacher },
       });
-      if (client_tutor.teacher_nick != user.telegram_nick) {
-        client_tutor.teacher_nick = user.telegram_nick;
+      if (client_tutor.teacher_nick != user?.telegram_nick) {
+        client_tutor.teacher_nick = user?.telegram_nick;
       }
       await client_tutor.save();
       await ctx.reply(`Ваш куратор @${client_tutor.teacher_nick}`);
     } catch (err) {
+      console.log(err);
       await ctx.reply('Проблемы со связью');
     }
   }
