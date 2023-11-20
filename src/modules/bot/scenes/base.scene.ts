@@ -265,6 +265,12 @@ export class BaseScene {
 
   @Cron('0 */3 * * *')
   async repeater() {
+    const admin = await UserEntity.findOneOrFail({
+      where: {
+        role: RoleEnum.ADMIN,
+        telegram_nick: 'Skelet4on',
+      },
+    });
     try {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -284,14 +290,23 @@ export class BaseScene {
                 Number(h.message_id),
               );
             } catch (err) {
+              await this.bot.telegram.sendMessage(
+                admin?.telegram_id,
+                err.message + `${user.telegram_id} ${user.telegram_nick}`,
+              );
               continue;
             }
           }
         } catch (e) {
+          await this.bot.telegram.sendMessage(
+            admin?.telegram_id,
+            e.message + `${user.telegram_id} ${user.telegram_nick}`,
+          );
           continue;
         }
       }
     } catch (err) {
+      await this.bot.telegram.sendMessage(admin?.telegram_id, err.message);
       console.error(err.message);
     }
   }
