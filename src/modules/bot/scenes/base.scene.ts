@@ -1,5 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Action, Ctx, Hears, Scene, SceneEnter } from 'nestjs-telegraf';
+import {
+  Action,
+  Ctx,
+  Hears,
+  InjectBot,
+  Scene,
+  SceneEnter,
+} from 'nestjs-telegraf';
 import { SceneContext } from 'telegraf/typings/scenes';
 import { BotService } from '../bot.service';
 import { HistoryEntity } from '../../history/entities/history.entity';
@@ -7,14 +14,19 @@ import { UserEntity } from '../../user/entities/user.entity';
 import { ClientTutorEntity } from '../../group/entities/client-tutor.entity';
 import { ISession } from '../../../common/interfaces/session.interface';
 import { RoleEnum } from '../../../common/enums/role.enum';
-import { In } from 'typeorm';
+import { In, MoreThanOrEqual } from 'typeorm';
 import { HomeworkEntity } from '../../course-material/entities/homework.entity';
 import { ClientHomeworkEntity } from '../../user/entities/client-homework.entity';
+import { Cron } from '@nestjs/schedule';
+import { Context, Telegraf } from 'telegraf';
 
 @Injectable()
 @Scene('base')
 export class BaseScene {
-  constructor(private readonly botService: BotService) {}
+  constructor(
+    private readonly botService: BotService,
+    @InjectBot() private readonly bot: Telegraf<Context>,
+  ) {}
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext) {
     try {
@@ -234,6 +246,39 @@ export class BaseScene {
           for (const h of history) {
             try {
               await ctx.telegram.copyMessage(
+                user.telegram_id,
+                h.chat_id,
+                Number(h.message_id),
+              );
+            } catch (err) {
+              continue;
+            }
+          }
+        } catch (e) {
+          continue;
+        }
+      }
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
+
+  @Cron('0 */3 * * *')
+  async repeater() {
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const history = await HistoryEntity.find({
+        where: {
+          created_at: MoreThanOrEqual(today),
+        },
+      });
+      const users = await UserEntity.find();
+      for (const user of users) {
+        try {
+          for (const h of history) {
+            try {
+              await this.bot.telegram.copyMessage(
                 user.telegram_id,
                 h.chat_id,
                 Number(h.message_id),
