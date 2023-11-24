@@ -48,7 +48,7 @@ export class BotService {
               { text: 'Сдать Отчет 📊', callback_data: 'submit-report' },
             ]
           : [],
-        contact_with_tutor
+        contact_with_tutor || show
           ? [{ text: 'Заполнить ФИО', callback_data: 'fio' }]
           : [],
         contact_with_tutor
