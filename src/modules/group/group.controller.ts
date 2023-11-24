@@ -27,7 +27,7 @@ export class GroupController {
   //   return await this.groupService.updateWithNumbers();
   // }
 
-  @Post()
+  @Post('send-numbers')
   async sendMessage() {
     return await this.groupService.sendMessage();
   }
