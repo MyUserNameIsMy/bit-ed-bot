@@ -22,8 +22,13 @@ export class GroupController {
     return await this.groupService.createGroup(groupDto);
   }
 
-  @Post('update-with-numbers')
-  async update() {
-    return await this.groupService.updateWithNumbers();
+  // @Post('update-with-numbers')
+  // async update() {
+  //   return await this.groupService.updateWithNumbers();
+  // }
+
+  @Post()
+  async sendMessage() {
+    return await this.groupService.sendMessage();
   }
 }

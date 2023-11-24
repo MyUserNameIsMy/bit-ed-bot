@@ -440,10 +440,34 @@ export class GroupService {
         const user = await UserEntity.findOne({ where: { telegram_id: key } });
         user.comp_number = value;
         await user.save();
+        console.log(user.comp_number);
       } catch (e) {
         await this.bot.telegram.sendMessage(
           '860476763',
           e.message + ' ' + key + ' ' + 'Comp Num',
+        );
+      }
+    }
+  }
+
+  async sendMessage() {
+    const users = await UserEntity.find({ where: { verified: true } });
+    for (const user of users) {
+      try {
+        if (
+          user?.comp_number &&
+          user?.comp_number >= 100 &&
+          user?.comp_number <= 500
+        ) {
+          await this.bot.telegram.sendMessage(
+            user.telegram_id,
+            `Ваш уникальный номер для участье в розыгрыше: ${user.comp_number}. Он также будет виден в личном меню.`,
+          );
+        }
+      } catch (e) {
+        await this.bot.telegram.sendMessage(
+          '860476763',
+          e.message + ' ' + user.telegram_id + ' ' + 'Comp Num',
         );
       }
     }
