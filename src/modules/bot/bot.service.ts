@@ -49,7 +49,12 @@ export class BotService {
             ]
           : [],
         contact_with_tutor || show
-          ? [{ text: 'Заполнить ФИО', callback_data: 'fio' }]
+          ? [
+              {
+                text: 'Заполнить ФИО для получения сертификата',
+                callback_data: 'fio',
+              },
+            ]
           : [],
         contact_with_tutor
           ? [{ text: 'Связаться с куратором 🤝', callback_data: 'contact' }]
