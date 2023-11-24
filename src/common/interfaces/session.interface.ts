@@ -6,5 +6,6 @@ export interface ISession {
     username?: string;
     hm?: string;
     group_name?: string;
+    fio?: string;
   };
 }

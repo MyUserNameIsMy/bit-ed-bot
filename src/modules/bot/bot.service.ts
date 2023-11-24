@@ -49,6 +49,9 @@ export class BotService {
             ]
           : [],
         contact_with_tutor
+          ? [{ text: 'Заполнить ФИО', callback_data: 'fio' }]
+          : [],
+        contact_with_tutor
           ? [{ text: 'Связаться с куратором 🤝', callback_data: 'contact' }]
           : [],
         show

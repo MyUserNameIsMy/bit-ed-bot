@@ -5,6 +5,8 @@ import { RoleEnum } from '../../../common/enums/role.enum';
 @Entity('users')
 export class UserEntity extends RootAbstractEntity {
   @Column({ nullable: true })
+  fio: string;
+  @Column({ nullable: true })
   firstname: string;
 
   @Column({ nullable: true })

@@ -12,6 +12,7 @@ import { AnswerScene } from './scenes/answer.scene';
 import { DirectusService } from '../../common/services/directus.service';
 import { SubmitReportScene } from './scenes/submit-report.scene';
 import { PostToGroupScene } from './scenes/post-to-group.scene';
+import { FioScene } from './scenes/fio.scene';
 
 @Module({
   imports: [HttpModule],
@@ -25,6 +26,7 @@ import { PostToGroupScene } from './scenes/post-to-group.scene';
     AnswerScene,
     SubmitReportScene,
     PostToGroupScene,
+    FioScene,
     UserService,
     QuestionService,
     DirectusService,

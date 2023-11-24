@@ -30,7 +30,7 @@ export class BaseScene {
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext) {
     try {
-      const telegram_id = ctx.message.from.id;
+      const telegram_id = ctx.from.id;
       const user = await UserEntity.findOne({
         where: {
           telegram_id: telegram_id.toString(),
@@ -41,20 +41,15 @@ export class BaseScene {
         where: { student: telegram_id.toString() },
       });
       console.log(ctx.message.from.username);
-      if (
-        ctx.message.from.username &&
-        ctx.message.from.username != user.telegram_nick
-      ) {
-        user.telegram_nick = ctx.message.from.username;
+      if (ctx.from.username && ctx.from.username != user.telegram_nick) {
+        user.telegram_nick = ctx.from.username;
       }
       user.balance = homeworks.reduce((accumulator, currentValue) => {
         return accumulator + currentValue.score;
       }, 0);
       await user.save();
       await ctx.reply(
-        `${
-          ctx.message.from.first_name
-        } ${this.botService.getRandomAnimalEmoji()}.\n` +
+        `${ctx.from.first_name} ${this.botService.getRandomAnimalEmoji()}.\n` +
           (user ? `Текущий баланс ${user?.balance} баллов.` : ''),
         {
           reply_markup: await this.botService.showMenuButtons(telegram_id),
@@ -175,6 +170,16 @@ export class BaseScene {
       console.error(err.message);
     }
     await ctx.scene.enter('answer');
+  }
+
+  @Action(/fio/)
+  async onFio(@Ctx() ctx: SceneContext) {
+    try {
+      await ctx.deleteMessage();
+    } catch (err) {
+      console.error(err.message);
+    }
+    await ctx.scene.enter('fio');
   }
 
   @Action(/history/)
