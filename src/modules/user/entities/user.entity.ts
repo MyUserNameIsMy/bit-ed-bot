@@ -29,4 +29,7 @@ export class UserEntity extends RootAbstractEntity {
 
   @Column({ default: 0 })
   balance: number;
+
+  @Column({ nullable: true })
+  comp_number: number;
 }
