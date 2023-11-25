@@ -52,7 +52,7 @@ export class BaseScene {
         `${ctx.from.first_name} ${this.botService.getRandomAnimalEmoji()}.\n` +
           (user ? `Текущий баланс ${user?.balance} баллов.` : '') +
           (user?.fio ? `\nФИО ${user?.fio}.` : '') +
-          (user?.fio && user?.comp_number >= 100 && user?.comp_number <= 500
+          (user?.comp_number >= 100 && user?.comp_number <= 500
             ? `\nУникальный номер ${user?.comp_number}.`
             : ''),
         {
