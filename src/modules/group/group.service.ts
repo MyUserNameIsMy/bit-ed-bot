@@ -492,7 +492,7 @@ export class GroupService {
         valign: 'center',
       });
       doc
-        .font('fonts/arialmt.ttf')
+        .font('fonts/Alice-Regular.ttf')
         .fontSize(36)
         .fillOpacity(0.75)
         // .font('Times-Italic')

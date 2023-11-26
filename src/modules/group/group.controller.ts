@@ -35,7 +35,7 @@ export class GroupController {
   @Post('generate-pdfs')
   async generatePDF() {
     return await this.groupService.generatePDF(
-      'Оспанов Нуржан Салижанович',
+      'Қайыргелді Сұлтан Мұратұлы',
       '1010101001',
     );
   }

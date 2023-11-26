@@ -192,7 +192,7 @@ export class BaseScene {
   async onCertificate(@Ctx() ctx: SceneContext) {
     try {
       await ctx.deleteMessage();
-      const user = await UserEntity.findOne({
+      const user = await UserEntity.findOneOrFail({
         where: {
           telegram_id: ctx.from.id.toString(),
         },
