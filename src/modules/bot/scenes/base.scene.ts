@@ -56,7 +56,8 @@ export class BaseScene {
           (user?.fio ? `\nФИО ${user?.fio}.` : '') +
           (user?.comp_number >= 100 && user?.comp_number <= 500
             ? `\nУникальный номер ${user?.comp_number}.`
-            : ''),
+            : '') +
+          (user?.tickets ? `\nВаши билеты ${user?.tickets}.` : ''),
         {
           reply_markup: await this.botService.showMenuButtons(telegram_id),
         },
