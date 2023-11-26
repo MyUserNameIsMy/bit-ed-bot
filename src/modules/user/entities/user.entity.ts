@@ -32,4 +32,7 @@ export class UserEntity extends RootAbstractEntity {
 
   @Column({ nullable: true })
   comp_number: number;
+
+  @Column({ nullable: true })
+  tickets: string;
 }

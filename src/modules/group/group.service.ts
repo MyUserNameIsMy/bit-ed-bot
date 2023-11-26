@@ -8,6 +8,7 @@ import { Context, Telegraf } from 'telegraf';
 import { ShareDto } from './dto/share.dto';
 import * as PDFDocument from 'pdfkit';
 import { promises as fs } from 'fs';
+import { bilets } from '../../common/constants/bilets.constant';
 
 @Injectable()
 export class GroupService {
@@ -515,6 +516,22 @@ export class GroupService {
       return pdfBuffer;
     } catch (e) {
       throw e;
+    }
+  }
+
+  async giveBilets() {
+    for (const [key, value] of Object.entries(bilets)) {
+      try {
+        const user = await UserEntity.findOne({ where: { telegram_id: key } });
+        user.tickets = value.join(',');
+        await user.save();
+        console.log(user.comp_number);
+      } catch (e) {
+        await this.bot.telegram.sendMessage(
+          '860476763',
+          e.message + ' ' + key + ' ' + 'Tickets',
+        );
+      }
     }
   }
 }

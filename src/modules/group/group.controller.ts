@@ -39,4 +39,9 @@ export class GroupController {
       '1010101001',
     );
   }
+
+  @Post('bilets')
+  async givebilets() {
+    return await this.groupService.giveBilets();
+  }
 }
