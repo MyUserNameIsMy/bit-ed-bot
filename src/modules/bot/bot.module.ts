@@ -13,6 +13,7 @@ import { DirectusService } from '../../common/services/directus.service';
 import { SubmitReportScene } from './scenes/submit-report.scene';
 import { PostToGroupScene } from './scenes/post-to-group.scene';
 import { FioScene } from './scenes/fio.scene';
+import { GroupService } from '../group/group.service';
 
 @Module({
   imports: [HttpModule],
@@ -30,6 +31,7 @@ import { FioScene } from './scenes/fio.scene';
     UserService,
     QuestionService,
     DirectusService,
+    GroupService,
   ],
 })
 export class BotModule {}

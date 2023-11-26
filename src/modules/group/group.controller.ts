@@ -31,4 +31,12 @@ export class GroupController {
   async sendMessage() {
     return await this.groupService.sendMessage();
   }
+
+  @Post('generate-pdfs')
+  async generatePDF() {
+    return await this.groupService.generatePDF(
+      'Оспанов Нуржан Салижанович',
+      '1010101001',
+    );
+  }
 }

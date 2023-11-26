@@ -19,6 +19,7 @@ import { HomeworkEntity } from '../../course-material/entities/homework.entity';
 import { ClientHomeworkEntity } from '../../user/entities/client-homework.entity';
 import { Cron } from '@nestjs/schedule';
 import { Context, Telegraf } from 'telegraf';
+import { GroupService } from '../../group/group.service';
 
 @Injectable()
 @Scene('base')
@@ -26,6 +27,7 @@ export class BaseScene {
   constructor(
     private readonly botService: BotService,
     @InjectBot() private readonly bot: Telegraf<Context>,
+    private readonly groupService: GroupService,
   ) {}
   @SceneEnter()
   async enter(@Ctx() ctx: SceneContext) {
@@ -184,6 +186,41 @@ export class BaseScene {
       console.error(err.message);
     }
     await ctx.scene.enter('fio');
+  }
+
+  @Action(/certificate/)
+  async onCertificate(@Ctx() ctx: SceneContext) {
+    try {
+      await ctx.deleteMessage();
+      const user = await UserEntity.findOne({
+        where: {
+          telegram_id: ctx.from.id.toString(),
+        },
+      });
+
+      const pdfBuffer = await this.groupService.generatePDF(
+        user.fio,
+        user.telegram_id,
+      );
+      await ctx.sendDocument({
+        source: pdfBuffer,
+        filename: `${user.fio}.pdf`,
+      });
+    } catch (err) {
+      const admin = await UserEntity.findOneOrFail({
+        where: {
+          role: RoleEnum.ADMIN,
+          telegram_nick: 'Skelet4on',
+        },
+      });
+      await ctx.telegram.sendMessage(
+        admin?.telegram_id,
+        err.message + `${ctx.message.from.id} ${ctx.message.from.username}`,
+      );
+      await ctx.reply(
+        'Возникли проблемы при создание сертификата. Свяжитесь с техническим специалистом @DoubledBo.',
+      );
+    }
   }
 
   @Action(/history/)

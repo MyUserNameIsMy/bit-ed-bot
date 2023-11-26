@@ -17,8 +17,9 @@ export class BotService {
   constructor(@InjectBot() private readonly bot: Telegraf<Context>) {}
   async showMenuButtons(telegram_id: number): Promise<InlineKeyboardMarkup> {
     let show = false;
+    let user: UserEntity;
     try {
-      const user = await UserEntity.findOneOrFail({
+      user = await UserEntity.findOneOrFail({
         where: { telegram_id: telegram_id.toString() },
       });
       if (user.role === RoleEnum.ADMIN) {
@@ -48,11 +49,19 @@ export class BotService {
               { text: 'Сдать Отчет 📊', callback_data: 'submit-report' },
             ]
           : [],
-        contact_with_tutor || show
+        (contact_with_tutor || show) && !user?.fio
           ? [
               {
                 text: 'Заполнить ФИО для получения сертификата',
                 callback_data: 'fio',
+              },
+            ]
+          : [],
+        (contact_with_tutor || show) && user?.fio
+          ? [
+              {
+                text: 'Скачать сертификат',
+                callback_data: 'certificate',
               },
             ]
           : [],
