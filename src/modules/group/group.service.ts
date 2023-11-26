@@ -7,7 +7,7 @@ import { InjectBot } from 'nestjs-telegraf';
 import { Context, Telegraf } from 'telegraf';
 import { ShareDto } from './dto/share.dto';
 import * as PDFDocument from 'pdfkit';
-import * as fs from 'fs';
+import { promises as fs } from 'fs';
 
 @Injectable()
 export class GroupService {
@@ -476,47 +476,45 @@ export class GroupService {
   }
 
   async generatePDF(fio: string, student: string) {
-    const pdfBuffer: Buffer = await new Promise((resolve) => {
-      const doc = new PDFDocument({
-        size: 'legal',
-        bufferPages: true,
-        layout: 'landscape',
+    try {
+      const pdfBuffer: Buffer = await new Promise((resolve) => {
+        const doc = new PDFDocument({
+          size: 'legal',
+          bufferPages: true,
+          layout: 'landscape',
+        });
+
+        // customize your PDF document
+
+        doc.image('uploads/сертификат.png', 0, 0, {
+          width: doc.page.width,
+          height: doc.page.height,
+          align: 'center',
+          valign: 'center',
+        });
+        doc
+          .font('fonts/Alice-Regular.ttf')
+          .fontSize(36)
+          .fillOpacity(0.75)
+          // .font('Times-Italic')
+          .fillColor('white')
+          .text(fio, 90, 300, { align: 'center' });
+        doc.end();
+
+        const buffer = [];
+        doc.on('data', buffer.push.bind(buffer));
+        doc.on('end', () => {
+          const data = Buffer.concat(buffer);
+          resolve(data);
+        });
       });
+      const filepath = `pdfs/${student.trim()}.pdf`;
 
-      // customize your PDF document
+      await fs.writeFile(filepath, pdfBuffer);
 
-      doc.image('uploads/сертификат.png', 0, 0, {
-        width: doc.page.width,
-        height: doc.page.height,
-        align: 'center',
-        valign: 'center',
-      });
-      doc
-        .font('fonts/Alice-Regular.ttf')
-        .fontSize(36)
-        .fillOpacity(0.75)
-        // .font('Times-Italic')
-        .fillColor('white')
-        .text(fio, 90, 300, { align: 'center' });
-      doc.end();
-
-      const buffer = [];
-      doc.on('data', buffer.push.bind(buffer));
-      doc.on('end', () => {
-        const data = Buffer.concat(buffer);
-        resolve(data);
-      });
-    });
-    const filepath = `pdfs/${student.trim()}.pdf`;
-
-    fs.writeFile(filepath, pdfBuffer, (err) => {
-      if (err) {
-        console.error('Error writing to file:', err);
-      } else {
-        console.log('Buffer written to file successfully.');
-      }
-    });
-
-    return pdfBuffer;
+      return pdfBuffer;
+    } catch (e) {
+      throw e;
+    }
   }
 }
