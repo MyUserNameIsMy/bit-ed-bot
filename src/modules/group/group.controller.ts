@@ -7,10 +7,10 @@ import { ShareDto } from './dto/share.dto';
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
 
-  // @Post()
-  // async createMany() {
-  //   return await this.groupService.createGroups();
-  // }
+  @Post('shuffle')
+  async createMany() {
+    return await this.groupService.createGroups();
+  }
 
   @Post('share-link')
   async share(@Body() shareDto: ShareDto) {

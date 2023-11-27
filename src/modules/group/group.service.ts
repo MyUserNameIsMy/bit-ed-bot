@@ -9,6 +9,7 @@ import { ShareDto } from './dto/share.dto';
 import * as PDFDocument from 'pdfkit';
 import { promises as fs } from 'fs';
 import { bilets } from '../../common/constants/bilets.constant';
+import { In } from 'typeorm';
 
 @Injectable()
 export class GroupService {
@@ -49,14 +50,21 @@ export class GroupService {
       where: { role: RoleEnum.MANAGER },
     });
 
-    const users = await UserEntity.find({
+    let users = await UserEntity.find({
       where: { role: RoleEnum.USER, verified: true },
     });
-
     const groups = [];
 
     const usersPerManager = Math.floor(users.length / managers.length);
     let remainingUsers = users.length % managers.length;
+
+    const old_groups = await ClientTutorEntity.find({
+      where: {
+        teacher: In(['1558985661', '826977066', '1430293320']),
+      },
+    });
+    const preserve = old_groups.map((item) => item.student);
+    users = users.filter((item) => !preserve.includes(item.telegram_id));
 
     for (let i = 0; i < managers.length; i++) {
       const manager = managers[i];
@@ -73,7 +81,7 @@ export class GroupService {
       for (const user of group['users']) {
         try {
           const client_tutor = new ClientTutorEntity();
-          client_tutor.group_name = group['manager'].firstname || 'magic';
+          client_tutor.group_name = group['manager'].firstname || 'Not Found';
           client_tutor.teacher = group['manager'].telegram_id;
           client_tutor.teacher_nick = group['manager'].telegram_nick;
           client_tutor.student = user.telegram_id;
