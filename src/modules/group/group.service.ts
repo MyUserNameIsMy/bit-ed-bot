@@ -55,9 +55,6 @@ export class GroupService {
     });
     const groups = [];
 
-    const usersPerManager = Math.floor(users.length / managers.length);
-    let remainingUsers = users.length % managers.length;
-
     const old_groups = await ClientTutorEntity.find({
       where: {
         teacher: In(['1558985661', '826977066', '1430293320']),
@@ -65,6 +62,9 @@ export class GroupService {
     });
     const preserve = old_groups.map((item) => item.student);
     users = users.filter((item) => !preserve.includes(item.telegram_id));
+
+    const usersPerManager = Math.floor(users.length / managers.length);
+    let remainingUsers = users.length % managers.length;
 
     for (let i = 0; i < managers.length; i++) {
       const manager = managers[i];
