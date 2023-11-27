@@ -58,7 +58,6 @@ export class GroupService {
     const old_groups = await ClientTutorEntity.find({
       where: {
         teacher: In(['826977066', '1430293320']),
-        g,
       },
     });
     const preserve = old_groups.map((item) => item.student);
